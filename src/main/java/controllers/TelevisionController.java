@@ -2,6 +2,7 @@ package controllers;
 
 //give this controller class @RestController annotation
 
+import exceptions.RecordNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +33,13 @@ public class TelevisionController {
 
     //get-request for one television
     @GetMapping("/televisions/{id}")
-    public ResponseEntity<String> getOneTelevision() {
-        return ResponseEntity.ok("One television delivered");
+    public ResponseEntity<Television> getOneTelevision(@PathVariable int id) {
+        if (id >= 0 && id < televisionList.size()) {
+            Television t = televisionList.get(id);
+            return new ResponseEntity<>(t, HttpStatus.OK);
+        } else {
+            throw new RecordNotFoundException("Television with ID number " + id + " does not exist");
+        }
     }
 
     //post-request for one television

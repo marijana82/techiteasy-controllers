@@ -43,30 +43,39 @@ public class TelevisionController {
     }
 
     //post-request for one television
-    @PostMapping("/television")
-    public ResponseEntity<String> createNewTelevision(@RequestBody String title) {
+    @PostMapping("/televisions/addNewTv")
+    public ResponseEntity<Television> createNewTelevision(@RequestBody Television addNewTv) {
         //here we save data in the database
-        String name = "Television One";
+
         URI location =
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
                         .path("/{name}")
-                        .buildAndExpand(name).toUri();
+                        .buildAndExpand(addNewTv.getName())
+                        .toUri();
         return ResponseEntity.created(location).build();
     }
 
     //put-request for one television
-    @PutMapping("/television/{id}")
-    public ResponseEntity<String> updateTelevision(@PathVariable int id, @RequestBody String tvTitle) {
-        //here is where the updating logics happens
-        //return ResponseEntity.noContent();
+    @PutMapping("/televisions/{id}")
+    public ResponseEntity<Television> updateTelevision(@PathVariable int id, @RequestBody Television television) {
+        if (id >= 0 && id < televisionList.size()) {
+            televisionList.set(id, television);
+            return new ResponseEntity<>(television, HttpStatus.OK);
+        } else {
+            throw new RecordNotFoundException("Television with id: " + id + " does not exist and cannot be updated");
+        }
 
     }
 
     //delete-request for one television
     @DeleteMapping("/televisions/{id}")
-    public ResponseEntity<Object> deleteTelevision(@PathVariable int id) {
-        //here is where the name gets deleted from the database
-        //return ResponseEntity.noContent();
+    public ResponseEntity<Television> deleteTelevision(@PathVariable int id) {
+        if(id >= 0 && id < televisionList.size()) {
+            televisionList.remove(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            throw new RecordNotFoundException("Television with id " + id + " does not exist and cannot be deleted");
+        }
     }
 }

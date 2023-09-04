@@ -1,4 +1,4 @@
-package controllers;
+package com.controllerstechiteasycontrolleropdracht.controllers;
 
 public class Television {
     String name;

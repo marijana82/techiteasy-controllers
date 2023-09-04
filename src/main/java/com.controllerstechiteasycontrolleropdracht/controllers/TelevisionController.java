@@ -1,4 +1,4 @@
-package controllers;
+package com.controllerstechiteasycontrolleropdracht.controllers;
 
 //give this controller class @RestController annotation
 
@@ -6,9 +6,7 @@ import exceptions.RecordNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,17 +41,19 @@ public class TelevisionController {
     }
 
     //post-request for one television
-    @PostMapping("/televisions/addNewTv")
-    public ResponseEntity<Television> createNewTelevision(@RequestBody Television addNewTv) {
+    @PostMapping("/televisions")
+    public ResponseEntity<Television> createNewTelevision(@RequestBody Television television) {
         //here we save data in the database
+        televisionList.add(television);
+        return new ResponseEntity<>(television, HttpStatus.CREATED);
 
-        URI location =
+       /* URI location =
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
                         .path("/{name}")
-                        .buildAndExpand(addNewTv.getName())
+                        .buildAndExpand(television.getName())
                         .toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).build();*/
     }
 
     //put-request for one television
